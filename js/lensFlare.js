@@ -40,10 +40,11 @@ function addLensFlare()
 
 		lensFlare.add( textureFlare3	, 80	, 0.6-0.3, THREE.AdditiveBlending );
 		lensFlare.add( textureHexangle	, 100	, 0.7-0.3, THREE.AdditiveBlending );
-		lensFlare.add( textureFlare3	, 150	, 0.9-0.3, THREE.AdditiveBlending );
+		lensFlare.add( textureHexangle	, 120	, 0.8-0.3, THREE.AdditiveBlending );
+		lensFlare.add( textureHexangle	, 150	, 0.9-0.3, THREE.AdditiveBlending );
 		lensFlare.add( textureFlare3	, 90	, 1.0-0.3, THREE.AdditiveBlending );
 
-		lensFlare.position		= light.position;
+		lensFlare.position	= light.position;
 
 		scene.add( lensFlare );
 	}

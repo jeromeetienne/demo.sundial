@@ -129,21 +129,40 @@ function buildSunDialObject(){
 
 function buildPyramid()
 {
-	var pyramidH	= 500;
+	var width	= 10;
+	var ratioH	= 10;
+	var pyramidH	= width*ratioH;
 	var texture	= THREE.ImageUtils.loadTexture( "images/water.jpg" );
-	texture.repeat.set(50,50);
-	texture.wrapS	= THREE.RepeatWrapping;
+	var texture	= THREE.ImageUtils.loadTexture("images/textures/MarbleTiles0058_5_thumbhuge.jpg");
+	texture.repeat.set(1,ratioH);
+	//texture.wrapS	= THREE.RepeatWrapping;
 	texture.wrapT	= THREE.RepeatWrapping;
-	var width	= 10/2;
-	var geometry	= new THREE.CylinderGeometry(Math.sqrt(width*width+width*width), 500/2, pyramidH, 4)
+	var geometry	= new THREE.CubeGeometry(width, pyramidH, width, 4)
+	
+	geometry.vertices.forEach(function(vertice){
+		if( vertice.position.y > 0 )	return;
+		vertice.position.x	*= ratioH*1.5;
+		vertice.position.z	*= ratioH*1.5;
+	});
+	// TODO remove the useless ones
+	geometry.computeCentroids();
+	geometry.computeBoundingSphere()
+	geometry.computeVertexNormals();
+	geometry.computeBoundingBox();
+	geometry.computeTangents();
+	geometry.computeVertexNormals();
+	geometry.computeFaceNormals();
+console.log("geometry", JSON.stringify(geometry.vertices))
+	
 	var material	= new THREE.MeshLambertMaterial({
 		ambient	: 0x404040,
-		color	: 0x444444,
-		//shading	: THREE.SmoothShading,
-		//map	: texture
+		color	: 0xaaaaaa,
+		shading	: THREE.SmoothShading,
+		map	: texture
 	});
 	//var material	= new THREE.MeshNormalMaterial();
 	var mesh	= new THREE.Mesh( geometry, material );
+	mesh.rotation.y	= Math.PI/4;
 	mesh.position.y	= -0.01 - pyramidH/2;
 	return mesh;
 }

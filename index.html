@@ -123,7 +123,7 @@
 			light.shadowCameraRight		=  5;
 			light.shadowCameraTop		=  5;
 			light.shadowCameraBottom	= -5;
-			light.shadowDarkness		= 0.5;
+			light.shadowDarkness		= 0.3;
 			shadowLight	= light;
 
 			scene.add( light );
@@ -145,6 +145,32 @@
 
 
 			buildSunDialObject();
+
+			var light	= new THREE.SpotLight( 0x4444FF, 2 );
+			scene.add( light.target );
+			light.castShadow		= true;
+			light.shadowCameraNear		= 0.01;
+			light.shadowCameraFov		= 100;
+			light.shadowDarkness		= 0.6;
+			light.shadowCameraVisible	= true;
+			scene.add( light );
+			spot1	= light;
+console.log("light", light, light.target.position)
+
+			var material	= new THREE.MeshPhongMaterial({
+				ambient		: 0xffFFFF,
+				color		: 0xff4488,
+				shading		: THREE.SmoothShading,
+				map		: THREE.ImageUtils.loadTexture( "images/water.jpg" ),
+				blending	: THREE.AdditiveBlending,
+				transparent	: true
+				//map	: THREE.ImageUtils.loadTexture( "images/moon_1024.jpg" )
+			});
+			var geometry	= new THREE.SphereGeometry(0.6, 32, 16)
+			var mesh	= new THREE.Mesh(geometry, material)
+			mesh.position	= light.position;
+			scene.add( mesh );
+			moon	= mesh;
 		}
 		
 
@@ -167,12 +193,20 @@
 		function render() {
 
 			var seconds	= Date.now() / 1000;
-			var piPerSecond	= seconds/Math.PI; 
+			var piPerSecond	= seconds * Math.PI; 
 			var hours	= seconds % 12;
 
 			var date	= new Date();
 			var hours	= date.getHours() % 12 + date.getMinutes()/60;
 			sundial.rotation.y	= hours * Math.PI/6;
+
+
+			var angle	= (1/4)*piPerSecond;
+			var light	= spot1;
+			light.position.set( Math.cos(angle)*5.5, 3.5, Math.sin(angle)*5.5 );
+			light.target.position.set(Math.cos(angle)*3, 0, Math.sin(angle)*3);
+
+			moon.rotation.y	= 2*angle;
 
 			// update camera controls
 			cameraControls.update();
