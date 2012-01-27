@@ -130,7 +130,7 @@ function buildSunDialObject(){
 function buildPyramid()
 {
 	var width	= 10;
-	var ratioH	= 10;
+	var ratioH	= 1.5;
 	var pyramidH	= width*ratioH;
 	var texture	= THREE.ImageUtils.loadTexture( "images/water.jpg" );
 	var texture	= THREE.ImageUtils.loadTexture("images/textures/MarbleTiles0058_5_thumbhuge.jpg");
@@ -141,8 +141,8 @@ function buildPyramid()
 	
 	geometry.vertices.forEach(function(vertice){
 		if( vertice.position.y > 0 )	return;
-		vertice.position.x	*= ratioH*1.5;
-		vertice.position.z	*= ratioH*1.5;
+		vertice.position.x	*= ratioH*0;
+		vertice.position.z	*= ratioH*0;
 	});
 	// TODO remove the useless ones
 	geometry.computeCentroids();

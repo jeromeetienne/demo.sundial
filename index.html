@@ -49,20 +49,6 @@
 		// init the scene
 		function init(){
 
-//var img = new Image();
-//img.onload = function() {
-//	//Pixastic.process(img, "invert");
-//	//Pixastic.process(img, "edges2");
-//	//Pixastic.process(img, "glow", {amount:1,radius:1.0});
-//	//Pixastic.process(img, "brightness", {brightness:300,contrast:1});
-//	Pixastic.process(img, "sharpen", {amount:0.5});
-//	//Pixastic.process(img, "edges2");
-//}
-//document.body.appendChild(img);
-////img.src = "images/lensflare/lensflare0.png";
-//img.src = "images/lensflare/lensflare3.png";
-//return true;
-
 			if( Detector.webgl ){
 				renderer = new THREE.WebGLRenderer({
 					antialias		: true,	// to get smoother output
@@ -89,8 +75,7 @@
 			// put a camera in the scene
 			camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 10000 );
 			camera.position.set(-0.5, 1.5, 7);
-			var cameraTarget	= new THREE.Vector3(0, 1., 0);
-			camera.lookAt(new THREE.Vector3(0, 1., 0));
+			camera.lookAt(new THREE.Vector3(0, 3., 0));
 			scene.add(camera);
 
 			// create a camera contol
@@ -158,15 +143,18 @@
 console.log("light", light, light.target.position)
 
 			var material	= new THREE.MeshPhongMaterial({
-				ambient		: 0xffFFFF,
-				color		: 0xff4488,
+				ambient		: 0xAA88FF,
+				color		: 0x8844FF,
+				ambient		: 0xaaaaaa,
+				color		: 0xaaaaaa,
 				shading		: THREE.SmoothShading,
 				map		: THREE.ImageUtils.loadTexture( "images/water.jpg" ),
 				blending	: THREE.AdditiveBlending,
-				transparent	: true
+				transparent	: true,
+				opacity		: 0.3,
 				//map	: THREE.ImageUtils.loadTexture( "images/moon_1024.jpg" )
 			});
-			var geometry	= new THREE.SphereGeometry(0.6, 32, 16)
+			var geometry	= new THREE.SphereGeometry(0.6 , 32, 16)
 			var mesh	= new THREE.Mesh(geometry, material)
 			mesh.position	= light.position;
 			scene.add( mesh );
@@ -207,6 +195,14 @@ console.log("light", light, light.target.position)
 			light.target.position.set(Math.cos(angle)*3, 0, Math.sin(angle)*3);
 
 			moon.rotation.y	= 2*angle;
+			
+			var intensity	= Math.pow(Math.abs(Math.cos(angle*5)), 4);
+			moon.material.opacity	= 0.5 + 0.5*intensity;
+			moon.scale.set( 0.5+0.5*intensity, 0.5+0.5*intensity, 0.5+0.5*intensity );
+
+			//spot1.color		= 0x404040 + 0x800080*intensity;
+			spot1.shadowDarkness	= 0.2 + 0.8*intensity;
+			spot1.intensity		= 1+intensity*4;
 
 			// update camera controls
 			cameraControls.update();
